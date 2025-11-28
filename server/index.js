@@ -9,29 +9,48 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 5001;
 
+// ------------------------------------
+// CORS: allow local dev + Vercel site
+// ------------------------------------
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://gastromenu-ai.vercel.app"
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin(origin, callback) {
+      // Allow requests with no origin (mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    }
   })
 );
 
 app.use(express.json({ limit: "5mb" }));
 
-// Initialize OpenAI Client
+// ------------------------------------
+// OpenAI client
+// ------------------------------------
 const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY
 });
 
-// ------------------------------
+// ------------------------------------
 // Health check
-// ------------------------------
+// ------------------------------------
 app.get("/", (req, res) => {
   res.send("GastroMenu AI backend is running ✔️");
 });
 
-// ------------------------------
+// ------------------------------------
 // AI: Parse Menu Text → JSON Dishes
-// ------------------------------
+// ------------------------------------
 app.post("/api/parse-menu", async (req, res) => {
   const { text } = req.body || {};
 
@@ -59,8 +78,8 @@ For each dish, return:
 
 Menu text:
 ${text}
-          `,
-        },
+          `
+        }
       ],
       response_format: {
         type: "json_schema",
@@ -81,16 +100,16 @@ ${text}
                     description: { type: "string" },
                     category: { type: "string" },
                     costPrice: { type: "number" },
-                    salePrice: { type: "number" },
+                    salePrice: { type: "number" }
                   },
-                  required: ["name", "category", "salePrice"],
-                },
-              },
+                  required: ["name", "category", "salePrice"]
+                }
+              }
             },
-            required: ["dishes"],
-          },
-        },
-      },
+            required: ["dishes"]
+          }
+        }
+      }
     });
 
     const raw = response.output[0].content[0].text;
@@ -103,9 +122,9 @@ ${text}
   }
 });
 
-// ------------------------------
+// ------------------------------------
 // AI: Chat with Waiter / Menu Assistant
-// ------------------------------
+// ------------------------------------
 app.post("/api/chat", async (req, res) => {
   const { messages } = req.body || {};
 
@@ -119,8 +138,8 @@ app.post("/api/chat", async (req, res) => {
     const response = await client.responses.create({
       model: "gpt-4.1-mini",
       instructions:
-        "You are an AI waiter. Be friendly and helpful. If asked about allergens, advise checking with staff.",
-      input: messages,
+        "You are an AI waiter. Be friendly, concise and helpful. If asked about allergens, always advise checking with the staff.",
+      input: messages
     });
 
     const reply = response.output_text;
@@ -131,9 +150,9 @@ app.post("/api/chat", async (req, res) => {
   }
 });
 
-// ------------------------------
+// ------------------------------------
 // Start server
-// ------------------------------
+// ------------------------------------
 app.listen(port, () => {
-  console.log(`GastroMenu AI backend listening on http://localhost:${port}`);
+  console.log(`GastroMenu AI backend listening on port ${port}`);
 });
