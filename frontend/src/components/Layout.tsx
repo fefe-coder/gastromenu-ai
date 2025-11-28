@@ -1,14 +1,17 @@
 // frontend/src/components/Layout.tsx
-import React, { ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 
 interface LayoutProps {
   children: ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="app-root" style={{ minHeight: "100vh", background: "#0f172a" }}>
+    <div
+      className="app-root"
+      style={{ minHeight: "100vh", background: "#0f172a" }}
+    >
       {/* Top bar */}
       <header
         style={{
@@ -20,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           background: "#020617",
           position: "sticky",
           top: 0,
-          zIndex: 20
+          zIndex: 20,
         }}
       >
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -28,37 +31,37 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             GastroMenu AI
           </span>
           <span style={{ color: "#9ca3af", fontSize: 12 }}>
-            AI-powered menu builder & digital menu
+            AI-powered menu builder &amp; digital menu
           </span>
         </div>
 
         <nav style={{ display: "flex", gap: 16, fontSize: 14 }}>
           <NavLink
             to="/dashboard"
-            style={({ isActive }) => ({
+            style={({ isActive }: { isActive: boolean }) => ({
               color: isActive ? "#38bdf8" : "#e5e7eb",
               textDecoration: "none",
-              fontWeight: isActive ? 600 : 400
+              fontWeight: isActive ? 600 : 400,
             })}
           >
             Dashboard
           </NavLink>
           <NavLink
             to="/manage"
-            style={({ isActive }) => ({
+            style={({ isActive }: { isActive: boolean }) => ({
               color: isActive ? "#38bdf8" : "#e5e7eb",
               textDecoration: "none",
-              fontWeight: isActive ? 600 : 400
+              fontWeight: isActive ? 600 : 400,
             })}
           >
             Manage Dishes
           </NavLink>
           <NavLink
             to="/menu"
-            style={({ isActive }) => ({
+            style={({ isActive }: { isActive: boolean }) => ({
               color: isActive ? "#38bdf8" : "#e5e7eb",
               textDecoration: "none",
-              fontWeight: isActive ? 600 : 400
+              fontWeight: isActive ? 600 : 400,
             })}
           >
             Public Menu
@@ -72,7 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           padding: "20px",
           maxWidth: 1100,
           margin: "0 auto",
-          color: "#e5e7eb"
+          color: "#e5e7eb",
         }}
       >
         {children}
@@ -85,7 +88,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           marginTop: 32,
           fontSize: 12,
           color: "#6b7280",
-          textAlign: "center"
+          textAlign: "center",
         }}
       >
         GastroMenu AI · demo build
