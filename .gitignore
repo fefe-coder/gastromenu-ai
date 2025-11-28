@@ -1,0 +1,16 @@
+# Node
+node_modules/
+server/node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Build
+dist/
+build/
+
+# Env
+server/.env
+
+# Misc
+.DS_Store
+.vscode/

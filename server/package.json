@@ -1,0 +1,17 @@
+{
+  "name": "gastromenu-ai-server",
+  "version": "1.0.0",
+  "description": "Backend for GastroMenu AI (Express + OpenAI)",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "openai": "^4.73.0"
+  }
+}
